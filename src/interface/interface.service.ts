@@ -29,25 +29,58 @@ export class InterfaceService {
     return { interfaceName: name, ...result.data() }
   }
 
+  // async getInterfaceInboundTopRank(rank: number) {
+  //   const data = []
+  //   const results = await db.collectionGroup('interface').orderBy('inbound', 'desc').limit(rank).get()
+    
+  //   results.forEach(result => {
+  //     const name = result.id.replace(/-/g, '/')
+  //     data.push({ interface: name, ...result.data() })
+  //   })
+
+  //   return data
+  // }
+
   async getInterfaceInboundTopRank(rank: number) {
     const data = []
-    const results = await db.collectionGroup('interface').orderBy('inbound', 'desc').limit(rank).get()
-    results.forEach(result => {
-      const name = result.id.replace(/-/g, '/')
-      data.push({ interface: name, ...result.data() })
-    })
+    const results = await db.collectionGroup('interface').orderBy('inbound', 'desc').get()
 
-    return data
+    results.forEach(result => {
+      let term = 'Vlan'
+      let search = new RegExp(term , 'i')
+      
+      if (search.test(result.id) == true) {
+        const name = result.id.replace(/-/g, '/')
+        data.push({ interface: name, ...result.data() })
+      }
+    })
+    
+    return data.slice(0, 10)
   }
 
+  // async getInterfaceOutboundTopRank(rank: number) {
+  //   const data = []
+  //   const results = await db.collectionGroup('interface').orderBy('outbound', 'desc').limit(rank).get()
+  //   results.forEach(result => {
+  //     const name = result.id.replace(/-/g, '/')
+  //     data.push({ interface: name, ...result.data() })
+  //   })
+
+  //   return data
+  // }
   async getInterfaceOutboundTopRank(rank: number) {
     const data = []
-    const results = await db.collectionGroup('interface').orderBy('outbound', 'desc').limit(rank).get()
+    const results = await db.collectionGroup('interface').orderBy('outbound', 'desc').get()
     results.forEach(result => {
-      const name = result.id.replace(/-/g, '/')
-      data.push({ interface: name, ...result.data() })
+      let term = 'Vlan'
+      let search = new RegExp(term , 'i')
+
+      if (search.test(result.id) == true) {
+        const name = result.id.replace(/-/g, '/')
+        data.push({ interface: name, ...result.data() })
+      }
     })
 
-    return data
+    return data.slice(0, 10)
   }
 }

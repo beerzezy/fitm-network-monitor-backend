@@ -12,24 +12,26 @@ export class TrafficService {
     this.networkRef = db.collection('network')
   }
 
-  async getTrafficData(deviceName: string, startAt: number, endAt: number): Promise<TrafficInterface[]> {
+  async getTrafficData(deviceName: string, startAt: number, endAt: number): Promise<TrafficInterface[]> {   
     const data = []
     const start = new Date(moment.unix(startAt).subtract(7, 'hour').toString())
     const end = new Date(moment.unix(endAt).subtract(7, 'hour').toString())
+
     const results = await this.networkRef.doc(deviceName).collection('traffic')
-      .where('timestamp', '>=', start)
+      //.where('timestamp', '>=', start)
       .where('timestamp', '<=', end)
       .orderBy('timestamp', 'desc')
       .get()
+      
     if (results.empty) {
       return
     }
     results.forEach(result => {
       const { timestamp, ...other } = result.data()
       const time = moment.unix(timestamp._seconds).add(7, 'hour').format('HH:mm  DD-MM-YYYY')
+      //console.log(timestamp)
       data.push({ id: result.id, timestamp: time, ...other })
     })
-
     return data
   }
 }
