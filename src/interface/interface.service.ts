@@ -29,18 +29,6 @@ export class InterfaceService {
     return { interfaceName: name, ...result.data() }
   }
 
-  // async getInterfaceInboundTopRank(rank: number) {
-  //   const data = []
-  //   const results = await db.collectionGroup('interface').orderBy('inbound', 'desc').limit(rank).get()
-    
-  //   results.forEach(result => {
-  //     const name = result.id.replace(/-/g, '/')
-  //     data.push({ interface: name, ...result.data() })
-  //   })
-
-  //   return data
-  // }
-
   async getInterfaceInboundTopRank(rank: number) {
     const data = []
     const results = await db.collectionGroup('interface').orderBy('inbound', 'desc').get()
@@ -58,16 +46,6 @@ export class InterfaceService {
     return data.slice(0, 10)
   }
 
-  // async getInterfaceOutboundTopRank(rank: number) {
-  //   const data = []
-  //   const results = await db.collectionGroup('interface').orderBy('outbound', 'desc').limit(rank).get()
-  //   results.forEach(result => {
-  //     const name = result.id.replace(/-/g, '/')
-  //     data.push({ interface: name, ...result.data() })
-  //   })
-
-  //   return data
-  // }
   async getInterfaceOutboundTopRank(rank: number) {
     const data = []
     const results = await db.collectionGroup('interface').orderBy('outbound', 'desc').get()

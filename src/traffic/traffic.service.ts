@@ -29,7 +29,6 @@ export class TrafficService {
     results.forEach(result => {
       const { timestamp, ...other } = result.data()
       const time = moment.unix(timestamp._seconds).add(7, 'hour').format('HH:mm  DD-MM-YYYY')
-      //console.log(timestamp)
       data.push({ id: result.id, timestamp: time, ...other })
     })
     return data

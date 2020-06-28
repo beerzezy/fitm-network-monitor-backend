@@ -6,14 +6,26 @@ import { SpeedInterface } from './speed.interface'
 @Injectable()
 export class SpeedService {
   async getSpeedData(): Promise<SpeedInterface[]> {
-    const data = []
-    const results = await db.collectionGroup('speed').orderBy('timestamp', 'desc').limit(8).get()
-    results.forEach(result => {
-      const { timestamp, ...other } = result.data()
-      const time = moment.unix(timestamp._seconds).add(7, 'hours').format('HH:mm  DD-MM-YYYY')
-      data.push({ deviceName: result.ref.parent.parent.id, timestamp: time, ...other })
+    var data = []
+    var deviceArr = []
+    
+    // Get Devices
+    let devices = await db.collection('network').limit(8).get()
+    devices.forEach(device => {
+      deviceArr.push({ deviceName: device.id })
     })
+    
+    for (let i = 0; i < deviceArr.length; i++) {
+      // Get speed of devices and prepare data for provide to front-end
+      const speed = await db.collection('network').doc(deviceArr[i].deviceName).collection('speed').orderBy('timestamp', 'desc').limit(1).get()
 
+      speed.forEach(doc => {
+        let {timestamp, ...other} = doc.data()
+        const time = moment.unix(timestamp._seconds).add(7, 'hours').format('HH:mm  DD-MM-YYYY')
+        data.push({ deviceName: deviceArr[i].deviceName, timestamp: time, ...other })
+      })
+    }
+    
     return data
   }
 }
