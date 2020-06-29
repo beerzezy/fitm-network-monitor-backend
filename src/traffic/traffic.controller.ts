@@ -13,4 +13,9 @@ export class TrafficController {
   async getTrafficData(@Param('deviceName') deviceName: string, @Query() queryString: GetTrafficQuery): Promise<TrafficInterface[]> {
     return this.trafficService.getTrafficData(deviceName, queryString.startAt, queryString.endAt)
   }
+
+  @Get(':deviceName/:type')
+  async getTrafficByType(@Param('deviceName') deviceName: string , @Param('type') type: string): Promise<TrafficInterface[]> {
+    return this.trafficService.getTrafficDataByType(deviceName, type)
+  }
 }
