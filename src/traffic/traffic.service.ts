@@ -65,27 +65,33 @@ export class TrafficService {
     const stFormatEnd = moment(stTimeEnd).format('x')
     const stFormatxEnd = stFormatEnd.substr(0, 10)
     const end = new Date(moment.unix(parseInt(stFormatxEnd)).add(7, 'hour').toString())
-    console.log("end : ", end)
+    console.log("start : ", start.toString())
 
     if (type == 'hour') {
       console.log("end : ", end)
     }
  
     const results = await this.networkRef.doc(deviceName).collection('traffic')
-      .where('timestamp', '<=', start)
-      //.where('timestamp', '<=', end)
       .orderBy('timestamp', 'desc')
       .get()
      
     if (results.empty) {
       return
     }
+
+
     results.forEach(result => {
       const { timestamp, ...other } = result.data()
-      const time = moment.unix(timestamp._seconds).add(7, 'hour').format('HH:mm  DD-MM-YYYY')
-      //Don't worry just compare on this
-      data.push({ id: result.id, timestamp: time, ...other })
+      const time = moment.unix(timestamp._seconds).format('HH:mm  DD-MM-YYYY')
+      const timeCompare = new Date(moment.unix(timestamp._seconds).add(7, 'hour').toString())
+      
+      if (start < timeCompare){
+        if (timeCompare < end)
+        data.push({ id: result.id, timestamp: time, ...other })
+      }
+      
     })
+
     return data
   }
 }
