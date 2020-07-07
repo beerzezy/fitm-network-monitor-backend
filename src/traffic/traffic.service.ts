@@ -50,18 +50,25 @@ export class TrafficService {
     
     const dateTime = moment().format('YYYY-MM-DD')
     let h = dateNow.getHours()
+
+    let hPreviousStr = ''
+    if (h - 1 < 0) {
+      hPreviousStr = '23'
+    } else {
+      if (h - 1 < 10) {
+        hPreviousStr = '0' + (h - 1).toString()
+      } else {
+        hPreviousStr = (h - 1).toString()
+      }
+    }
+
     let hStr = ''
     if (h < 10) {
       hStr = '0' + h
     }else {
       hStr = h.toString()
     }
-   
-    const stTime = `${dateTime} ${hStr}:00`
-    const stFormat = moment(stTime).format('x')
-    const stFormatx = stFormat.substr(0, 10)
-    const start = new Date(moment.unix(parseInt(stFormatx)).add(7, 'hour').toString())
-    console.log("start : ", start)
+
     let m = dateNow.getMinutes()
     let mStr = ''
     if (m < 10) {
@@ -69,12 +76,19 @@ export class TrafficService {
     }else {
       mStr = m.toString()
     }
+   
+    const stTime = `${dateTime} ${hPreviousStr}:${mStr}`
+    const stFormat = moment(stTime).format('x')
+    const stFormatx = stFormat.substr(0, 10)
+    const start = new Date(moment.unix(parseInt(stFormatx)).add(7, 'hour').toString())
+    console.log("startl : ", start)
+
   
     const stTimeEnd = `${dateTime} ${hStr}:${mStr}`
     const stFormatEnd = moment(stTimeEnd).format('x')
     const stFormatxEnd = stFormatEnd.substr(0, 10)
     const end = new Date(moment.unix(parseInt(stFormatxEnd)).add(7, 'hour').toString())
-    console.log("start : ", start.toString())
+    console.log("end : ", end)
 
     const results = await this.networkRef.doc(deviceName).collection('traffic')
       .orderBy('timestamp', 'desc')
@@ -83,7 +97,6 @@ export class TrafficService {
     if (results.empty) {
       return
     }
-
 
     results.forEach(result => {
       const { timestamp, ...other } = result.data()
@@ -108,27 +121,29 @@ export class TrafficService {
 
     let year = dateNow.getFullYear()
 
-    let month = dateNow.getMonth()+1
+    // let month = dateNow.getMonth()+1  //because january start 0
+    let monthPrevoius = dateNow.getMonth()
+    let monthCurrent = monthPrevoius+1
     let monthStr = ''
-    if (month < 10) {
-      monthStr = '0' + month
+    if (monthCurrent < 10) {
+      monthStr = '0' + monthCurrent
     } else {
-      monthStr = month.toString()
+      monthStr = monthCurrent.toString()
     }
 
-    // let d = dateNow.getDate()
-    // let dStr = ''
-    // if (d < 10) {
-    //   dStr = '0' + d
-    // }else {
-    //   dStr = d.toString()
-    // }
-
-    const stTime = `${year}-${monthStr}-01 00:00`
-    const stFormat = moment(stTime).format('x')
-    const stFormatx = stFormat.substr(0, 10)
-    const start = new Date(moment.unix(parseInt(stFormatx)).add(7, 'hour').toString())
-    console.log("start : ", start)
+    let d = dateNow.getDate()
+    let dayPreviousStr = ''
+    if (d - 1 < 0) {
+      let lastDayOfMonth = new Date(year, monthPrevoius, 0).getDate()
+      dayPreviousStr = lastDayOfMonth.toString()
+    }else {
+      if (d - 1 < 10){
+        dayPreviousStr = '0' + (d - 1).toString()
+      } else {
+        dayPreviousStr = (d - 1).toString()
+      }
+    }
+    console.log("dStr : ", dayPreviousStr)
 
     let h = dateNow.getHours()
     let hStr = ''
@@ -145,13 +160,19 @@ export class TrafficService {
     }else {
       mStr = m.toString()
     }
-  
+
+    const stTime = `${year}-${monthStr}-${dayPreviousStr} ${hStr}:${mStr}`
+    const stFormat = moment(stTime).format('x')
+    const stFormatx = stFormat.substr(0, 10)
+    const start = new Date(moment.unix(parseInt(stFormatx)).add(7, 'hour').toString())
+    console.log("start : ", start)
+
 
     const stTimeEnd = `${dateTime} ${hStr}:${mStr}`
     const stFormatEnd = moment(stTimeEnd).format('x')
     const stFormatxEnd = stFormatEnd.substr(0, 10)
     const end = new Date(moment.unix(parseInt(stFormatxEnd)).add(7, 'hour').toString())
-
+    console.log("end : ", end)
 
     const results = await this.networkRef.doc(deviceName).collection('traffic')
       .orderBy('timestamp', 'desc')
@@ -160,7 +181,6 @@ export class TrafficService {
     if (results.empty) {
       return
     }
-
 
     results.forEach(result => {
       const { timestamp, ...other } = result.data()
