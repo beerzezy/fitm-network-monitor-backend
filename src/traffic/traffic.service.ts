@@ -70,7 +70,7 @@ export class TrafficService {
       const { timestamp, ...other } = result.data()
       const time = moment.unix(timestamp._seconds).format('HH:mm  DD-MM-YYYY')
       const timeCompare = new Date(moment.unix(timestamp._seconds).add(7, 'hour').toString())
-      
+
       if (start < timeCompare){
         if (timeCompare < end)
         data.push({ id: result.id, timestamp: time, ...other })
@@ -187,9 +187,9 @@ export class TrafficService {
     
     const dateTime = moment().format('YYYY-MM-DD')
 
-    let year = dateNow.getFullYear()
+    var year = dateNow.getFullYear()
+    var month = dateNow.getMonth()+1
 
-    let month = dateNow.getMonth()+1
     let monthStr = ''
     if (month < 10) {
       monthStr = '0' + month
@@ -197,42 +197,15 @@ export class TrafficService {
       monthStr = month.toString()
     }
 
-    let d = dateNow.getDate()
-    let dStr = ''
-    if (d < 10) {
-      dStr = '0' + d
-    }else {
-      dStr = d.toString()
-    }
 
-    const stTime = `${year}-${monthStr}-${dStr} 00:00`
-    const stFormat = moment(stTime).format('x')
-    const stFormatx = stFormat.substr(0, 10)
-    const start = new Date(moment.unix(parseInt(stFormatx)).add(7, 'hour').toString())
-    console.log("start : ", start)
+    var start = new Date(moment(`${year}-${monthStr}-01 00:00`,'YYYY-MM-DD HH:mm:ss.SSS').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ'))
+    console.log("startl : ", start)
 
     let h = dateNow.getHours()
-    let hStr = ''
-    if (h < 10) {
-      hStr = '0' + h
-    }else {
-      hStr = h.toString()
-    }
-
     let m = dateNow.getMinutes()
-    let mStr = ''
-    if (m < 10) {
-      mStr = '0' + m
-    }else {
-      mStr = m.toString()
-    }
-  
 
-    const stTimeEnd = `${dateTime} ${hStr}:${mStr}`
-    const stFormatEnd = moment(stTimeEnd).format('x')
-    const stFormatxEnd = stFormatEnd.substr(0, 10)
-    const end = new Date(moment.unix(parseInt(stFormatxEnd)).add(7, 'hour').toString())
-
+    const end = new Date(moment(`${dateTime} ${h}:${m}`,'YYYY-MM-DD HH:mm:ss.SSS').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ'))
+    console.log("end : ", end)
 
     const results = await this.networkRef.doc(deviceName).collection('traffic')
       .orderBy('timestamp', 'desc')
@@ -255,7 +228,69 @@ export class TrafficService {
       
     })
 
-    return data
+    var day = dateNow.getDate()
+    console.log("day : ", day)
+
+    var inDay = []
+    var endDay = day
+    console.log("endDay : ", endDay)
+    var startDay = endDay-1
+    var inboundSum = 0 , outboundSum = 0
+    var i = 1
+
+
+    var lastTime = new Date(moment(`${dateTime} 23:59:00.000`,'YYYY-MM-DD HH:mm:ss.SSS').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ'))
+    var startTime = new Date(moment(`${dateTime} 00:00:00.000`,'YYYY-MM-DD HH:mm:ss.SSS').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ'))
+
+    console.log("lastTime2",lastTime)
+    console.log("startTime2",startTime)
+    console.log("end : ", end)
+
+    var inboundMean = 0
+    var outboundSumMean = 0
+    var isChangeHour = false
+    var year = dateNow.getFullYear()
+    var month = dateNow.getMonth()+1
+
+    data.forEach(result => {
+      let { timestamp, outbound, inbound } = result
+      let timeStamped = new Date(moment(timestamp,'HH:mm DD-MM-YYYY').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
+
+      if (isChangeHour) {
+        endDay = startDay
+        startDay = endDay-1
+        lastTime = new Date(moment(`${year}-${month}-${endDay} 23:59:00.000`,'YYYY-MM-DD HH:mm:ss').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
+        startTime = new Date(moment(`${year}-${month}-${startDay} 00:00:00.000Z`,'YYYY-MM-DD HH:mm:ss').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
+        console.log("lastTime",lastTime, "|| startTime",startTime, "|| timeStamped",timeStamped)
+      }
+     
+      if (startTime < timeStamped){
+        isChangeHour = false
+        inboundSum += inbound
+        outboundSum += outbound
+        i++
+      } else {
+        inboundMean = inboundSum / i
+        outboundSumMean = outboundSum / i
+        inDay.push({ id: result.id, timestamp: startTime, inbound: inboundMean , outbound: outboundSumMean })
+        isChangeHour = true
+        endDay = startDay
+        inboundSum = 0
+        outboundSum = 0
+        i = 0
+      }
+    })
+    
+    inDay.forEach(dd => {
+      console.log("inDay",dd)
+    })
+
+
+    return inDay
+
+
+
+   //return data
   }
 
 }
