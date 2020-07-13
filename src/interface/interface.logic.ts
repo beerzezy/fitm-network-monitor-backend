@@ -63,7 +63,8 @@ export class InterfaceLogic {
     ])
     const rshop = await Promise.all([
       // this.interfaceService.getInterfaceByName('rshop', 'GigabitEthernet1-1-1'),
-      this.interfaceService.getInterfaceByName('rshop', 'TenGigabitEthernet1-1-3')
+      this.interfaceService.getInterfaceByName('rshop', 'TenGigabitEthernet1-1-3'),
+      this.interfaceService.getInterfaceByName('rshop', 'TenGigabitEthernet1-1-4')
     ])
 
     return { sw9400, sw3850, r101c, r124, r415, r330a, rshop }
