@@ -66,8 +66,11 @@ export class InterfaceLogic {
       this.interfaceService.getInterfaceByName('rshop', 'TenGigabitEthernet1-1-3'),
       this.interfaceService.getInterfaceByName('rshop', 'TenGigabitEthernet1-1-4')
     ])
+    const rsad = await Promise.all([
+      this.interfaceService.getInterfaceByName('rsad', 'GigabitEthernet26')
+    ])
 
-    return { sw9400, sw3850, r101c, r124, r415, r330a, rshop }
+    return { sw9400, sw3850, r101c, r124, r415, r330a, rshop, rsad }
   }
 
   async setInterface(deviceName: string, status: number): Promise<void> {
