@@ -3,6 +3,7 @@ import { DeviceInterface } from './device.interface';
 import { DeviceService } from './device.service';
 import * as snmp from 'snmp-native'
 import { DeviceBody } from './device-body.dto'
+import { Observable } from 'rxjs'
 
 @Controller('device')
 export class DeviceController {
@@ -18,7 +19,7 @@ export class DeviceController {
   @Post('shutdown')
   async shutdownDevice(@Body() body: DeviceBody) {
     console.log(body)
-    const device = new snmp.Session({ host: body.deviceIp, community: 'public' })
+    const device = new snmp.Session({ host: body.deviceIp, port: 161, community: 'private' })
     device.set({ oid: body.oid, value: 2, type: 2 }, function (error, varbind) {
       console.log(varbind)
       if (error) {
@@ -28,13 +29,5 @@ export class DeviceController {
           console.log('The set is done.');
       }
     })
-      //  const result = new Observable(observer => {
-        //    device.set({ oid: body.oid, value: 2, type: 64 }, (err, varbinds) => {
-                // observer.next(varbinds[0].value)
-          //      observer.complete()
-           // })
-        //})
-
-        // return result
   }
 }
