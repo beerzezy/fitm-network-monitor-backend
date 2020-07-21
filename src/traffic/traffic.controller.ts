@@ -10,8 +10,13 @@ export class TrafficController {
   ) {}
 
   @Get(':deviceName')
-  async getTrafficData(@Param('deviceName') deviceName: string, @Query() queryString: GetTrafficQuery): Promise<TrafficInterface[]> {
-    return this.trafficService.getTrafficData(deviceName, queryString.startAt, queryString.endAt)
+  async getTrafficDataPick(@Param('deviceName') deviceName: string, @Query() queryString: GetTrafficQuery): Promise<TrafficInterface[]> {
+    return this.trafficService.getTrafficDataPick(deviceName, queryString.startAt, queryString.endAt)
+  }
+
+  @Get('home/:deviceName')
+  async getTrafficData(@Param('deviceName') deviceName: string): Promise<TrafficInterface[]> {
+    return this.trafficService.getTrafficData(deviceName)
   }
 
   @Get(':deviceName/:type')
