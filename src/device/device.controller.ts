@@ -18,9 +18,24 @@ export class DeviceController {
 
   @Post('shutdown')
   async shutdownDevice(@Body() body: DeviceBody) {
+
     console.log(body)
     const device = new snmp.Session({ host: body.deviceIp, port: 161, community: 'private' })
-    device.set({ oid: body.oid, value: 2, type: 2 }, function (error, varbind) {
+    var result = device.set({ oid: body.oid, value: 2, type: 2 }, function (error, varbind) {
+      console.log(varbind)
+      if (error) {
+          console.log('Fail :(');
+          console.log(error)
+      } else {
+          console.log('The set is done.');
+      }
+    })
+  }
+
+  @Post('start')
+  async startDevice(@Body() body: DeviceBody) {
+    const device = new snmp.Session({ host: body.deviceIp, port: 161, community: 'private' })
+    var result = device.set({ oid: body.oid, value: 1, type: 2 }, function (error, varbind) {
       console.log(varbind)
       if (error) {
           console.log('Fail :(');
