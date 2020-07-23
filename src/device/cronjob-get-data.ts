@@ -46,13 +46,13 @@ export class CronjobGetData extends NestSchedule {
     }
 
     private async checkCpuUsageSw9400() {
-        const sw9400 = await this.deviceService.getDeviceData('sw9400').then((result) => { return result.cpu })
+        const cpu = await this.deviceService.getDeviceData('sw9400').then((result) => { return result.cpu })
         let rawdata = fs.readFileSync(this.filePathSw9400.toString(), 'utf-8')
         let device = JSON.parse(rawdata)
         
-        if (sw9400 > 90) {
+        if (cpu > 90) {
             if (device.status == 'Normal') {
-                this.sendMessage(device.device_ip, device.device_name)
+                this.sendMessage(device.device_ip, device.device_name, cpu)
                 console.log('send notify')
 
                 let sw9400 = { 
@@ -77,13 +77,13 @@ export class CronjobGetData extends NestSchedule {
     }
 
     private async checkCpuUsageRshop() {
-        const rshop = await this.deviceService.getDeviceData('rshop').then((result) => { return result.cpu })
+        const cpu = await this.deviceService.getDeviceData('rshop').then((result) => { return result.cpu })
         let rawdata = fs.readFileSync(this.filePathRshop.toString(), 'utf-8')
         let device = JSON.parse(rawdata)
         
-        if (rshop > 90) {
+        if (cpu > 90) {
             if (device.status == 'Normal') {
-                this.sendMessage(device.device_ip, device.device_name)
+                this.sendMessage(device.device_ip, device.device_name, cpu)
                 console.log('send notify')
 
                 let rshop = { 
@@ -108,13 +108,13 @@ export class CronjobGetData extends NestSchedule {
     }
 
     private async checkCpuUsageRsad() {
-        const rsad = await this.deviceService.getDeviceData('rsad').then((result) => { return result.cpu })
+        const cpu = await this.deviceService.getDeviceData('rsad').then((result) => { return result.cpu })
         let rawdata = fs.readFileSync(this.filePathRsad.toString(), 'utf-8')
         let device = JSON.parse(rawdata)
 
-        if (rsad > 90) {
+        if (cpu > 90) {
             if (device.status == 'Normal') {
-                this.sendMessage(device.device_ip, device.device_name)
+                this.sendMessage(device.device_ip, device.device_name, cpu)
                 console.log('send notify')
 
                 let rsad = { 
@@ -139,13 +139,13 @@ export class CronjobGetData extends NestSchedule {
     }
 
     private async checkCpuUsageR415() {
-        const r415 = await this.deviceService.getDeviceData('r415').then((result) => { return result.cpu })
+        const cpu = await this.deviceService.getDeviceData('r415').then((result) => { return result.cpu })
         let rawdata = fs.readFileSync(this.filePathR415.toString(), 'utf-8')
         let device = JSON.parse(rawdata)
         
-        if (r415 > 90) {
+        if (cpu > 90) {
             if (device.status == 'Normal') {
-                this.sendMessage(device.device_ip, device.device_name)
+                this.sendMessage(device.device_ip, device.device_name, cpu)
                 console.log('send notify')
 
                 let r415 = { 
@@ -170,13 +170,13 @@ export class CronjobGetData extends NestSchedule {
     }
 
     private async checkCpuUsageR330a() {
-        const r330a = await this.deviceService.getDeviceData('r330a').then((result) => { return result.cpu })
+        const cpu = await this.deviceService.getDeviceData('r330a').then((result) => { return result.cpu })
         let rawdata = fs.readFileSync(this.filePathR330a.toString(), 'utf-8')
         let device = JSON.parse(rawdata)
         
-        if (r330a > 90) {
+        if (cpu > 90) {
             if (device.status == 'Normal') {
-                this.sendMessage(device.device_ip, device.device_name)
+                this.sendMessage(device.device_ip, device.device_name, cpu)
                 console.log('send notify')
 
                 let r330a = { 
@@ -201,13 +201,13 @@ export class CronjobGetData extends NestSchedule {
     }
 
     private async checkCpuUsageR124() {
-        const r124 = await this.deviceService.getDeviceData('r124').then((result) => { return result.cpu })
+        const cpu = await this.deviceService.getDeviceData('r124').then((result) => { return result.cpu })
         let rawdata = fs.readFileSync(this.filePathR124.toString(), 'utf-8')
         let device = JSON.parse(rawdata)
         
-        if (r124 > 90) {
+        if (cpu > 90) {
             if (device.status == 'Normal') {
-                this.sendMessage(device.device_ip, device.device_name)
+                this.sendMessage(device.device_ip, device.device_name, cpu)
                 console.log('send notify')
 
                 let r124 = { 
@@ -232,13 +232,13 @@ export class CronjobGetData extends NestSchedule {
     }
 
     private async checkCpuUsageR101c() {
-        const r101c = await this.deviceService.getDeviceData('r101c').then((result) => { return result.cpu })
+        const cpu = await this.deviceService.getDeviceData('r101c').then((result) => { return result.cpu })
         let rawdata = fs.readFileSync(this.filePathR101c.toString(), 'utf-8')
         let device = JSON.parse(rawdata)
         
-        if (r101c > 90) {
+        if (cpu > 90) {
             if (device.status == 'Normal') {
-                this.sendMessage(device.device_ip, device.device_name)
+                this.sendMessage(device.device_ip, device.device_name, cpu)
                 console.log('send notify')
 
                 let r101c = { 
@@ -263,13 +263,13 @@ export class CronjobGetData extends NestSchedule {
     }
 
     private async checkCpuUsage3850_r415() {
-        const sw3850 = await this.deviceService.getDeviceData('sw3850').then((result) => { return result.cpu })
+        const cpu = await this.deviceService.getDeviceData('sw3850').then((result) => { return result.cpu })
         let rawdata = fs.readFileSync(this.filePath3850_r415.toString(), 'utf-8')
         let device = JSON.parse(rawdata)
         
-        if (sw3850 > 90) {
+        if (cpu > 90) {
             if (device.status == 'Normal') {
-                this.sendMessage(device.device_ip, device.device_name)
+                this.sendMessage(device.device_ip, device.device_name, cpu)
                 console.log('send notify')
 
                 let sw3850 = { 
@@ -294,7 +294,7 @@ export class CronjobGetData extends NestSchedule {
     }
 
 
-    private async sendMessage(device_ip: string, device_name: string) {
+    private async sendMessage(device_ip: string, device_name: string, cpuUsage: number) {
         console.log('sendMessage : ', device_name, device_ip)
         let token = 'oh9PA0x5oFNDd83fUZRRwlhO44sseTkZFbDRNoGZmQF'
     
@@ -302,7 +302,7 @@ export class CronjobGetData extends NestSchedule {
           method: 'POST',
           url: 'https://notify-api.line.me/api/notify',
           data: qs.stringify({
-            message: `${device_name} cpu usage 90%, ip address : ${device_ip}`
+            message: `${device_name} cpu usage ${cpuUsage}%, ip address : ${device_ip}`
           }),
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
