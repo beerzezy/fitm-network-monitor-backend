@@ -33,7 +33,7 @@ export class TrafficService {
     }
     results.forEach(result => {
       const { timestamp, ...other } = result.data()
-      const time = moment.unix(timestamp._seconds).format('HH:mm  DD-MM-YYYY')
+      const time = moment.unix(timestamp._seconds).format('HH:mm')
         data.push({ id: result.id, timestamp: time, ...other })
     })
     return data
@@ -173,7 +173,7 @@ export class TrafficService {
     if (inboundSum != 0) {
         inboundMean = inboundSum / i
         outboundMean = outboundSum / i
-        hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('DD')
+        hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('DD-MM')
         if (inboundMean != null) {
           inDays.push({ id: data[data.length - 1].id, timestamp: hourTimeShow, inbound: inboundMean , outbound: outboundMean })
           reduceDay++
