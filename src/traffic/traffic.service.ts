@@ -304,8 +304,6 @@ export class TrafficService {
     var epochTime = start.setHours(hourAmount)
     var startTime = new Date(epochTime)
 
-    console.log("startTime : ",startTime,"epochTime :",epochTime)
-
     var inHour = []
     var inboundSum = 0 , outboundSum = 0
     var inboundMean = 0 ,outboundMean = 0
@@ -402,7 +400,6 @@ export class TrafficService {
     var epochStart = +start
     var epochEnd = +end
     var resetEpoch = 0 , multiEpoch = 0
-    console.log("epochStart : ", new Date(epochStart),"epochEnd",new Date(epochEnd))
 
     do {
       var eEnd = epochStart + 300000
@@ -413,7 +410,6 @@ export class TrafficService {
       if (results.empty) {
         epochStart = epochStart + 80000000
         resetEpoch++
-        console.log("in if epochStart : ", new Date(epochStart),"resetEpoch",new Date(resetEpoch))
       } else {
         results.forEach(result => {
           const { timestamp, ...other } = result.data()
@@ -424,7 +420,6 @@ export class TrafficService {
         multiEpoch = resetEpoch * 80000000
         epochStart = epochStart - multiEpoch + 86400000 + 10000
         resetEpoch = 0
-        console.log("in else epochStart : ", new Date(epochStart),"multiEpoch",new Date(multiEpoch))
       }
 
     } while(epochStart < epochEnd)
@@ -615,7 +610,7 @@ export class TrafficService {
     var inboundMean = 0
     var outboundSumMean = 0
     var isChangeHour = false
-    console.log("month",month,"lastTime", lastTime,"startTime",startTime,"startMonth",startMonth,"endMonth",endMonth)
+
     data.forEach(result => {
       let { timestamp, outbound, inbound } = result
       let timeStamped = new Date(moment(timestamp,'HH:mm DD-MM-YYYY').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())

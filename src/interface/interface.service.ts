@@ -38,7 +38,7 @@ export class InterfaceService {
       let search = new RegExp(term , 'i')
       
       if (search.test(result.id) == true) {
-        const name = result.id.replace(/-/g, '/')
+        const name = result.id.replace(/-/g, '/').replace("unrouted ", "")
         data.push({ interface: name, ...result.data() })
       }
     })
@@ -54,7 +54,7 @@ export class InterfaceService {
       let search = new RegExp(term , 'i')
 
       if (search.test(result.id) == true) {
-        const name = result.id.replace(/-/g, '/')
+        const name = result.id.replace(/-/g, '/').replace("unrouted ", "")
         data.push({ interface: name, ...result.data() })
       }
     })
