@@ -576,12 +576,12 @@ export class TrafficService {
     //   }
 
     // } while(epochStart < epochEnd)
-    
+
+    // if (data.length == 0) {
+    //   return
+    // }
 
     // data.sort((a, b) => (a.epoch < b.epoch) ? 1 : -1)
-    // data.forEach(result => {
-    //   console.log("data : ", result)
-    // })
 
     // var epochMonth = 2505600000
     // var distanceTime = +end - +start
@@ -607,14 +607,14 @@ export class TrafficService {
     var month = dateNow.getMonth()+1
     
     var inMonth = []
-    var endMonth = month
+    var endMonth = month+1
     var startMonth = endMonth-1
     var inboundSum = 0 , outboundSum = 0
     var i = 1
-
-    var lastTime = new Date(moment(`${year}-${endMonth}-01 00:00:00.000`,'YYYY-MM-DD HH:mm:ss.SSS').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ'))
+    console.log("startMonth",startMonth,"endMonth",endMonth)
+    // var lastTime = new Date(moment(`${year}-${endMonth}-01 00:00:00.000`,'YYYY-MM-DD HH:mm:ss.SSS').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ'))
     var startTime = new Date(moment(`${year}-${startMonth}-01 00:00:00.000`,'YYYY-MM-DD HH:mm:ss.SSS').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ'))
-    var yearTimeFormat = moment(lastTime,'YYYY-MM-DD HH:mm:ss').subtract(7, 'hour').format('MM')
+    var yearTimeFormat = moment(startTime,'YYYY-MM-DD HH:mm:ss').subtract(7, 'hour').format('MM')
 
     var inboundMean = 0
     var outboundSumMean = 0
@@ -627,7 +627,7 @@ export class TrafficService {
       if (isChangeHour) {
         endMonth = startMonth
         startMonth = endMonth-1
-        lastTime = new Date(moment(`${year}-${endMonth}-01 00:00:00.000`,'YYYY-MM-DD HH:mm:ss').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
+        // lastTime = new Date(moment(`${year}-${endMonth}-01 00:00:00.000`,'YYYY-MM-DD HH:mm:ss').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
         startTime = new Date(moment(`${year}-${startMonth}-01 00:00:00.000Z`,'YYYY-MM-DD HH:mm:ss').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
       }
      
@@ -639,8 +639,9 @@ export class TrafficService {
       } else {
         inboundMean = inboundSum / i
         outboundSumMean = outboundSum / i
-        yearTimeFormat = moment(lastTime,'YYYY-MM-DD HH:mm:ss').subtract(7, 'hour').format('MM')
+        yearTimeFormat = moment(startTime,'YYYY-MM-DD HH:mm:ss').subtract(7, 'hour').format('MM')
         inMonth.push({ id: result.id, timestamp: yearTimeFormat, inbound: inboundMean , outbound: outboundSumMean })
+        console.log("startMonth",startMonth,"endMonth",endMonth)
         isChangeHour = true
         endMonth = startMonth
         inboundSum = 0
@@ -652,7 +653,7 @@ export class TrafficService {
     if (inboundSum != 0) {
       inboundMean = inboundSum / i
       outboundSumMean = outboundSum / i
-      yearTimeFormat = moment(lastTime,'YYYY-MM-DD HH:mm:ss').subtract(7, 'hour').format('MM')
+      yearTimeFormat = moment(startTime,'YYYY-MM-DD HH:mm:ss').subtract(7, 'hour').format('MM')
       inMonth.push({ id: data[data.length - 1].id, timestamp: yearTimeFormat, inbound: inboundMean , outbound: outboundSumMean })
     }
     
