@@ -298,7 +298,6 @@ export class TrafficService {
     // data.forEach(result => {
     //   console.log("data : ", result)
     // })
-
     var epochHour = 3600000
     var distanceTime = +end - +start
     var hourAmount = (distanceTime / epochHour | 0)
@@ -323,30 +322,38 @@ export class TrafficService {
         }
     } while(isCanCompare)
 
+    // var beforeValue = 0
+    var afterValue  = [] 
     data.forEach(result => {
       let { timestamp, outbound, inbound } = result
       let timeStamped = new Date(moment(timestamp,'HH:mm DD-MM-YYYY').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
       if (startTime < timeStamped) {
-        inboundSum += inbound
-        outboundSum += outbound
+        // inboundSum += inbound
+        // outboundSum += outbound
+        afterValue.push({inbound:inbound,outbound:outbound})
         i++
       } else if (i != 0) {
-        inboundMean = inboundSum / i
-        outboundMean = outboundSum / i
+        // inboundMean = inboundSum / i
+        // outboundMean = outboundSum / i
+       
+        inboundMean = afterValue[afterValue.length-1].inbound - afterValue[0].inbound
+        outboundMean = afterValue[afterValue.length-1].outbound - afterValue[0].outbound
         hourTimeShow = moment(startTime,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('HH:mm')
         if (inboundMean != null) {
           inHour.push({ id: result.id, timestamp: hourTimeShow, inbound: inboundMean , outbound: outboundMean })
           reduceHour++
         }
+        afterValue = []
         i = 0
-        inboundSum = 0
-        outboundSum = 0
+        // inboundSum = 0
+        // outboundSum = 0
         epochTime = start.setHours(hourAmount - reduceHour)
         startTime = new Date(epochTime)
         
         if (startTime < timeStamped) {
-            inboundSum += inbound
-            outboundSum += outbound
+            // inboundSum += inbound
+            // outboundSum += outbound
+            afterValue.push({inbound:inbound,outbound:outbound})
             i++
         }
       } else {
@@ -354,15 +361,19 @@ export class TrafficService {
         epochTime = start.setHours(hourAmount - reduceHour)
         startTime = new Date(epochTime)
         if (startTime < timeStamped) {
-            inboundSum += inbound
-            outboundSum += outbound
+            // inboundSum += inbound
+            // outboundSum += outbound
+            afterValue.push({inbound:inbound,outbound:outbound})
             i++
         }
       }
+      
     })
     if (inboundSum != 0) {
-      inboundMean = inboundSum / i
-      outboundMean = outboundSum / i
+      // inboundMean = inboundSum / i
+      // outboundMean = outboundSum / i
+      inboundMean = afterValue[afterValue.length-1].inbound - afterValue[0].inbound
+      outboundMean = afterValue[afterValue.length-1].outbound - afterValue[0].outbound
       hourTimeShow = moment(startTime,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('HH:mm')
       if (inboundMean != null) {
         inHour.push({ id: data[data.length - 1].id, timestamp: hourTimeShow, inbound: inboundMean , outbound: outboundMean })
