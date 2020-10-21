@@ -225,8 +225,28 @@ export class TrafficService {
         data.push({ id: result.id, timestamp: hourTimeShow, ...other })
 
     })
+    var i = 1
+    const nano = []
 
-    return data
+    if  (data[0].inbound != null){
+      var intB = data[0].inbound
+      var outB = data[0].outbound
+  
+      data.forEach(result => {
+        let { timestamp, outbound, inbound } = result
+        if (i%5===0) {
+          let inVal = inbound - intB
+          let outVal = outbound - outB
+          nano.push({ id: result.id, timestamp: timestamp, inbound: inVal , outbound: outVal })
+          intB = inbound
+          outB = outbound
+        } 
+        i++
+      })
+    }
+
+
+    return nano
   }
 
   async getTrafficDataByDays(deviceName: string): Promise<TrafficInterface[]> {   
