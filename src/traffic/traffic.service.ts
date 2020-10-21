@@ -221,8 +221,8 @@ export class TrafficService {
     results.forEach(result => {
       const { timestamp, ...other } = result.data()
       const time = moment.unix(timestamp._seconds).format('HH:mm  DD-MM-YYYY')
-      let hourTimeShow = moment(time,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('HH:mm')
-        data.push({ id: result.id, timestamp: hourTimeShow, ...other })
+
+        data.push({ id: result.id, timestamp: time, ...other })
 
     })
     var i = 1
@@ -234,10 +234,12 @@ export class TrafficService {
   
       data.forEach(result => {
         let { timestamp, outbound, inbound } = result
+     
         if (i%5===0) {
           let inVal = inbound - intB
           let outVal = outbound - outB
-          nano.push({ id: result.id, timestamp: timestamp, inbound: inVal , outbound: outVal })
+          let hourTimeShow = moment(timestamp,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('HH:mm')
+          nano.push({ id: result.id, timestamp: hourTimeShow, inbound: inVal , outbound: outVal })
           intB = inbound
           outB = outbound
         } 
