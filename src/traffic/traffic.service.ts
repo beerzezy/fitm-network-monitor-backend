@@ -236,10 +236,22 @@ export class TrafficService {
         let { timestamp, outbound, inbound } = result
      
         if (i%5===0) {
-          let inVal = inbound - intB
-          let outVal = outbound - outB
-          let hourTimeShow = moment(timestamp,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('HH:mm')
-          nano.push({ id: result.id, timestamp: hourTimeShow, inbound: inVal , outbound: outVal })
+          let inVal = 0
+          let outVal = 0
+
+          if (inbound >= intB) {
+            inVal = inbound - intB
+          } else {
+            inVal = intB - inbound
+          }
+
+          if (outbound >= outB) {
+            outVal = outbound - outB
+          } else {
+            outVal = outB - outbound
+          }
+
+          nano.push({ id: result.id, timestamp: timestamp, inbound: inVal , outbound: outVal })
           intB = inbound
           outB = outbound
         } 
