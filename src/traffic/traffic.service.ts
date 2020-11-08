@@ -109,9 +109,7 @@ export class TrafficService {
     var date = start.getDate()
 
     var inDays = []
-    var inboundSum = 0 , outboundSum = 0
-    var inboundMean = 0 ,outboundMean = 0
-    var i = 1 , reduceDay = 0
+    var reduceDay = 0
     var hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').format('DD-MM')
 
     var timeStamp1 = new Date(moment(data[0].timestamp,'HH:mm DD-MM-YYYY').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
@@ -126,7 +124,8 @@ export class TrafficService {
         }
     } while(isCanCompare)
 
-   
+    var calInOut = []
+    var inboundResult = 0,outboundResult = 0
     data.forEach(result => {
       let { timestamp, outbound, inbound } = result
       let timeStamped = new Date(moment(timestamp,'HH:mm DD-MM-YYYY').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
@@ -137,47 +136,34 @@ export class TrafficService {
       }
 
       if (startDay < timeStamped) {
-        inboundSum += inbound
-        outboundSum += outbound
-        i++
-      } else if (i != 1) {
-        inboundMean = inboundSum / i
-        outboundMean = outboundSum / i
+        calInOut.push({inbound: inbound, outbound: outbound})
+      } else if (calInOut != null) {
+        inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
+        outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
         hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('DD-MM')
-        if (inboundMean != null) {
-          inDays.push({ id: result.id, timestamp: hourTimeShow, inbound: inboundMean , outbound: outboundMean })
-          reduceDay++
-        }
-        i = 1
-        inboundSum = 0
-        outboundSum = 0
+        inDays.push({ id: result.id, timestamp: hourTimeShow, inbound: inboundResult , outbound: outboundResult })
+        reduceDay++
+        calInOut = []
         epochDay = start.setDate(date - reduceDay)
         startDay = new Date(epochDay)
         if (startDay < timeStamped) {
-            inboundSum += inbound
-            outboundSum += outbound
-            i++
+          calInOut.push({inbound: inbound, outbound: outbound})
         }
       } else {
         reduceDay++
         epochDay = start.setDate(date - reduceDay)
         startDay = new Date(epochDay)
         if (startDay < timeStamped) {
-            inboundSum += inbound
-            outboundSum += outbound
-            i++
+          calInOut.push({inbound: inbound, outbound: outbound})
         }
       }
     })
 
-    if (inboundSum != 0) {
-        inboundMean = inboundSum / i
-        outboundMean = outboundSum / i
-        hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('DD-MM')
-        if (inboundMean != null) {
-          inDays.push({ id: data[data.length - 1].id, timestamp: hourTimeShow, inbound: inboundMean , outbound: outboundMean })
-          reduceDay++
-        }
+    if (calInOut != null) {
+      inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
+      outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
+      hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('DD-MM')
+      inDays.push({ id: data[data.length - 1].id, timestamp: hourTimeShow, inbound: inboundResult , outbound: outboundResult })
     }
 
     return inDays
@@ -338,9 +324,7 @@ export class TrafficService {
     var epochTime = start.setHours(hourAmount + 7)
     var startTime = new Date(epochTime)
     var inHour = []
-    var inboundSum = 0 , outboundSum = 0
-    var inboundMean = 0 ,outboundMean = 0
-    var i = 0 , reduceHour = 0
+    var reduceHour = 0
     var hourTimeShow = moment(startTime,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('HH:mm')
 
     var timeStamp1 = new Date(moment(data[0].timestamp,'HH:mm DD-MM-YYYY').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
@@ -356,64 +340,42 @@ export class TrafficService {
         }
     } while(isCanCompare)
 
-    // var beforeValue = 0
-    var afterValue  = [] 
+    var calInOut = []
+    var inboundResult = 0,outboundResult = 0
     data.forEach(result => {
       let { timestamp, outbound, inbound } = result
       let timeStamped = new Date(moment(timestamp,'HH:mm DD-MM-YYYY').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
       if (startTime < timeStamped) {
-        // inboundSum += inbound
-        // outboundSum += outbound
-        afterValue.push({inbound:inbound,outbound:outbound})
-        i++
-      } else if (i != 0) {
-        // inboundMean = inboundSum / i
-        // outboundMean = outboundSum / i
-       
-        inboundMean = afterValue[afterValue.length-1].inbound - afterValue[0].inbound
-        outboundMean = afterValue[afterValue.length-1].outbound - afterValue[0].outbound
+        calInOut.push({inbound: inbound, outbound: outbound})
+      } else if (calInOut != null) {
         hourTimeShow = moment(startTime,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('HH:mm')
-        if (inboundMean != null) {
-          inHour.push({ id: result.id, timestamp: hourTimeShow, inbound: inboundMean , outbound: outboundMean })
-          reduceHour++
-        }
-        afterValue = []
-        i = 0
-        // inboundSum = 0
-        // outboundSum = 0
+        inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
+        outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
+        inHour.push({ id: result.id, timestamp: hourTimeShow, inbound: inboundResult , outbound: outboundResult })
+        reduceHour++
+        
+        calInOut = []
         epochTime = start.setHours(hourAmount - reduceHour)
         startTime = new Date(epochTime)
-        
         if (startTime < timeStamped) {
-            // inboundSum += inbound
-            // outboundSum += outbound
-            afterValue.push({inbound:inbound,outbound:outbound})
-            i++
+            calInOut.push({inbound: inbound, outbound: outbound})
         }
       } else {
         reduceHour++
         epochTime = start.setHours(hourAmount - reduceHour)
         startTime = new Date(epochTime)
         if (startTime < timeStamped) {
-            // inboundSum += inbound
-            // outboundSum += outbound
-            afterValue.push({inbound:inbound,outbound:outbound})
-            i++
+          calInOut.push({inbound: inbound, outbound: outbound})
         }
       }
       
     })
-    if (inboundSum != 0) {
-      // inboundMean = inboundSum / i
-      // outboundMean = outboundSum / i
-      inboundMean = afterValue[afterValue.length-1].inbound - afterValue[0].inbound
-      outboundMean = afterValue[afterValue.length-1].outbound - afterValue[0].outbound
-      hourTimeShow = moment(startTime,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('HH:mm')
-      if (inboundMean != null) {
-        inHour.push({ id: data[data.length - 1].id, timestamp: hourTimeShow, inbound: inboundMean , outbound: outboundMean })
-        reduceHour++
-        }
-    }
+    // if (calInOut != null) {
+    //   inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
+    //   outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
+    //   hourTimeShow = moment(startTime,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('HH:mm')
+    //   inHour.push({ id: data[data.length - 1].id, timestamp: hourTimeShow, inbound: inboundResult , outbound: outboundResult })      
+    // }
     return inHour
   }
 
@@ -434,55 +396,55 @@ export class TrafficService {
     console.log("end : ", end)
     console.log("start : ", start)
 
-    // // CALL FIREBASE
-    // const results = await this.networkRef.doc(deviceName).collection('traffic')
-    //   .where("epoch", ">=", +start).where("epoch", "<", +end)
-    //   .orderBy('epoch', 'desc')
-    //   .get()
+    // CALL FIREBASE
+    const results = await this.networkRef.doc(deviceName).collection('traffic')
+      .where("epoch", ">=", +start).where("epoch", "<", +end)
+      .orderBy('epoch', 'desc')
+      .get()
      
-    // if (results.empty) {
-    //   return
-    // }
-
-    // results.forEach(result => {
-    //   const { timestamp, ...other } = result.data()
-    //   const time = moment.unix(timestamp._seconds).format('HH:mm  DD-MM-YYYY')
-    //     data.push({ id: result.id, timestamp: time, ...other })
-    // })
-
-    //LOOP CALL FIREBASE
-    var epochStart = +start
-    var epochEnd = +end
-    var resetEpoch = 0 , multiEpoch = 0
-
-    do {
-      var eEnd = epochStart + 300000
-      let results = await this.networkRef.doc(deviceName).collection('traffic')
-        .where("epoch", ">=", epochStart).where("epoch", "<", eEnd)
-        .get()
-
-      if (results.empty) {
-        epochStart = epochStart + 80000000
-        resetEpoch++
-      } else {
-        results.forEach(result => {
-          const { timestamp, ...other } = result.data()
-          const time = moment.unix(timestamp._seconds).format('HH:mm  DD-MM-YYYY')
-            data.push({ id: result.id, timestamp: time, ...other })
-        })
-      
-        multiEpoch = resetEpoch * 80000000
-        epochStart = epochStart - multiEpoch + 86400000 + 10000
-        resetEpoch = 0
-      }
-
-    } while(epochStart < epochEnd)
-
-    if (data.length == 0) {
+    if (results.empty) {
       return
     }
 
-    data.sort((a, b) => (a.epoch < b.epoch) ? 1 : -1)
+    results.forEach(result => {
+      const { timestamp, ...other } = result.data()
+      const time = moment.unix(timestamp._seconds).format('HH:mm  DD-MM-YYYY')
+        data.push({ id: result.id, timestamp: time, ...other })
+    })
+
+    // //LOOP CALL FIREBASE
+    // var epochStart = +start
+    // var epochEnd = +end
+    // var resetEpoch = 0 , multiEpoch = 0
+
+    // do {
+    //   var eEnd = epochStart + 300000
+    //   let results = await this.networkRef.doc(deviceName).collection('traffic')
+    //     .where("epoch", ">=", epochStart).where("epoch", "<", eEnd)
+    //     .get()
+
+    //   if (results.empty) {
+    //     epochStart = epochStart + 80000000
+    //     resetEpoch++
+    //   } else {
+    //     results.forEach(result => {
+    //       const { timestamp, ...other } = result.data()
+    //       const time = moment.unix(timestamp._seconds).format('HH:mm  DD-MM-YYYY')
+    //         data.push({ id: result.id, timestamp: time, ...other })
+    //     })
+      
+    //     multiEpoch = resetEpoch * 80000000
+    //     epochStart = epochStart - multiEpoch + 86400000 + 10000
+    //     resetEpoch = 0
+    //   }
+
+    // } while(epochStart < epochEnd)
+
+    // if (data.length == 0) {
+    //   return
+    // }
+
+    // data.sort((a, b) => (a.epoch < b.epoch) ? 1 : -1)
 
     var epochDay = 86400000
     var distanceTime = +end - +start
@@ -492,9 +454,8 @@ export class TrafficService {
     var startDay = new Date(epochDay)
 
     var inDays = []
-    var inboundSum = 0 , outboundSum = 0
-    var inboundMean = 0 ,outboundMean = 0
-    var i = 0 , reduceDay = 0
+
+    var reduceDay = 0
     var hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').format('DD')
 
     var timeStamp1 = new Date(moment(data[0].timestamp,'HH:mm DD-MM-YYYY').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
@@ -509,52 +470,44 @@ export class TrafficService {
         }
     } while(isCanCompare)
 
-   
+    var calInOut = []
+    var inboundResult = 0,outboundResult = 0
+
     data.forEach(result => {
       let { timestamp, outbound, inbound } = result
       let timeStamped = new Date(moment(timestamp,'HH:mm DD-MM-YYYY').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
       if (startDay < timeStamped) {
-        inboundSum += inbound
-        outboundSum += outbound
-        i++
-      } else if (i != 0) {
-        inboundMean = inboundSum / i
-        outboundMean = outboundSum / i
+        calInOut.push({inbound: inbound , outbound: outbound})
+      } else if (calInOut != null) {
         hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('DD')
-        if (inboundMean != null) {
-          inDays.push({ id: result.id, timestamp: hourTimeShow, inbound: inboundMean , outbound: outboundMean })
-          reduceDay++
-        }
-        i = 0
-        inboundSum = 0
-        outboundSum = 0
+        // value = (condition) ? if : else
+        inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
+        outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
+        inDays.push({ id: data[data.length - 1].id, timestamp: hourTimeShow, inbound: inboundResult , outbound: outboundResult })
+        reduceDay++
+        calInOut = []
         epochDay = start.setDate(dayAmount - reduceDay)
         startDay = new Date(epochDay)
         if (startDay < timeStamped) {
-            inboundSum += inbound
-            outboundSum += outbound
-            i++
+          calInOut.push({inbound: inbound , outbound: outbound})
         }
       } else {
         reduceDay++
         epochDay = start.setDate(dayAmount - reduceDay)
         startDay = new Date(epochDay)
         if (startDay < timeStamped) {
-            inboundSum += inbound
-            outboundSum += outbound
-            i++
+          calInOut.push({inbound: inbound , outbound: outbound})
         }
       }
     })
-
-    if (inboundSum != 0) {
-        inboundMean = inboundSum / i
-        outboundMean = outboundSum / i
-        hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('DD')
-        if (inboundMean != null) {
-          inDays.push({ id: data[data.length - 1].id, timestamp: hourTimeShow, inbound: inboundMean , outbound: outboundMean })
-          reduceDay++
-        }
+    
+    if (calInOut != null) {
+      hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('DD')
+      // value = (condition) ? if : else
+      inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
+      outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
+      inDays.push({ id: data[data.length - 1].id, timestamp: hourTimeShow, inbound: inboundResult , outbound: outboundResult })
+      reduceDay++
     }
 
     return inDays
@@ -648,22 +601,18 @@ export class TrafficService {
     //     console.log("IS OUT OF AMOUNT DAYS OF MONTH")
     // }
 
-
     var month = dateNow.getMonth()+1
     
     var inMonth = []
     var endMonth = month+1
     var startMonth = endMonth-1
-    var inboundSum = 0 , outboundSum = 0
-    var i = 1
     console.log("startMonth",startMonth,"endMonth",endMonth)
-    // var lastTime = new Date(moment(`${year}-${endMonth}-01 00:00:00.000`,'YYYY-MM-DD HH:mm:ss.SSS').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ'))
     var startTime = new Date(moment(`${year}-${startMonth}-01 00:00:00.000`,'YYYY-MM-DD HH:mm:ss.SSS').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ'))
     var yearTimeFormat = moment(startTime,'YYYY-MM-DD HH:mm:ss').subtract(7, 'hour').format('MM')
 
-    var inboundMean = 0
-    var outboundSumMean = 0
     var isChangeHour = false
+    var calInOut = []
+    var inboundResult = 0,outboundResult = 0
 
     data.forEach(result => {
       let { timestamp, outbound, inbound } = result
@@ -672,34 +621,29 @@ export class TrafficService {
       if (isChangeHour) {
         endMonth = startMonth
         startMonth = endMonth-1
-        // lastTime = new Date(moment(`${year}-${endMonth}-01 00:00:00.000`,'YYYY-MM-DD HH:mm:ss').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
         startTime = new Date(moment(`${year}-${startMonth}-01 00:00:00.000Z`,'YYYY-MM-DD HH:mm:ss').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
       }
      
       if (startTime < timeStamped){
         isChangeHour = false
-        inboundSum += inbound
-        outboundSum += outbound
-        i++
+        calInOut.push({inbound: inbound , outbound: outbound})
       } else {
-        inboundMean = inboundSum / i
-        outboundSumMean = outboundSum / i
+        inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
+        outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
         yearTimeFormat = moment(startTime,'YYYY-MM-DD HH:mm:ss').subtract(7, 'hour').format('MM')
-        inMonth.push({ id: result.id, timestamp: yearTimeFormat, inbound: inboundMean , outbound: outboundSumMean })
+        inMonth.push({ id: result.id, timestamp: yearTimeFormat, inbound: inboundResult , outbound: outboundResult })
         console.log("startMonth",startMonth,"endMonth",endMonth)
         isChangeHour = true
         endMonth = startMonth
-        inboundSum = 0
-        outboundSum = 0
-        i = 0
+        calInOut = []
       }
     })
 
-    if (inboundSum != 0) {
-      inboundMean = inboundSum / i
-      outboundSumMean = outboundSum / i
+    if (calInOut != null) {
+      inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
+      outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
       yearTimeFormat = moment(startTime,'YYYY-MM-DD HH:mm:ss').subtract(7, 'hour').format('MM')
-      inMonth.push({ id: data[data.length - 1].id, timestamp: yearTimeFormat, inbound: inboundMean , outbound: outboundSumMean })
+      inMonth.push({ id: data[data.length - 1].id, timestamp: yearTimeFormat, inbound: inboundResult , outbound: outboundResult })
     }
     
     return inMonth
