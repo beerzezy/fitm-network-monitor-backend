@@ -137,7 +137,7 @@ export class TrafficService {
 
       if (startDay < timeStamped) {
         calInOut.push({inbound: inbound, outbound: outbound})
-      } else if (calInOut != null) {
+      } else if (calInOut.length != 0) {
         inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
         outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
         hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('DD-MM')
@@ -159,7 +159,7 @@ export class TrafficService {
       }
     })
 
-    if (calInOut != null) {
+    if (calInOut.length != 0) {
       inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
       outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
       hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('DD-MM')
@@ -207,10 +207,9 @@ export class TrafficService {
     results.forEach(result => {
       const { timestamp, ...other } = result.data()
       const time = moment.unix(timestamp._seconds).format('HH:mm  DD-MM-YYYY')
-
         data.push({ id: result.id, timestamp: time, ...other })
-
     })
+
     var i = 1
     const nano = []
 
@@ -225,13 +224,19 @@ export class TrafficService {
           let inVal = 0
           let outVal = 0
 
-          if (inbound >= intB) {
+          console.log("timestamp",timestamp)
+          console.log("inbound",inVal)
+          console.log("last inbound",inbound)
+          console.log("outbound",outVal)
+          console.log("last outbound",inbound)
+
+          if (inbound > intB) {
             inVal = inbound - intB
           } else {
             inVal = intB - inbound
           }
 
-          if (outbound >= outB) {
+          if (outbound > outB) {
             outVal = outbound - outB
           } else {
             outVal = outB - outbound
@@ -244,7 +249,6 @@ export class TrafficService {
         i++
       })
     }
-
 
     return nano
   }
@@ -344,13 +348,23 @@ export class TrafficService {
     var inboundResult = 0,outboundResult = 0
     data.forEach(result => {
       let { timestamp, outbound, inbound } = result
+      console.log("result : outbound",outbound,"inbound",inbound,"timestamp",timestamp)
+
       let timeStamped = new Date(moment(timestamp,'HH:mm DD-MM-YYYY').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
+      console.log("startTime",startTime)
+      console.log("timeStamped",timeStamped)
       if (startTime < timeStamped) {
         calInOut.push({inbound: inbound, outbound: outbound})
-      } else if (calInOut != null) {
+      } else if (calInOut.length != 0) {
+        console.log("calInOut --<",calInOut)
+        console.log("calInOut start",calInOut[0].inbound)
+        console.log("calInOut last",calInOut[calInOut.length - 1].inbound)
+
         hourTimeShow = moment(startTime,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('HH:mm')
         inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
         outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
+        console.log("inboundResult",inboundResult)
+        console.log("outboundResult",outboundResult)
         inHour.push({ id: result.id, timestamp: hourTimeShow, inbound: inboundResult , outbound: outboundResult })
         reduceHour++
         
@@ -370,12 +384,12 @@ export class TrafficService {
       }
       
     })
-    // if (calInOut != null) {
-    //   inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
-    //   outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
-    //   hourTimeShow = moment(startTime,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('HH:mm')
-    //   inHour.push({ id: data[data.length - 1].id, timestamp: hourTimeShow, inbound: inboundResult , outbound: outboundResult })      
-    // }
+    if (calInOut.length != 0) {
+      inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
+      outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
+      hourTimeShow = moment(startTime,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('HH:mm')
+      inHour.push({ id: data[data.length - 1].id, timestamp: hourTimeShow, inbound: inboundResult , outbound: outboundResult })      
+    }
     return inHour
   }
 
@@ -478,7 +492,7 @@ export class TrafficService {
       let timeStamped = new Date(moment(timestamp,'HH:mm DD-MM-YYYY').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSZ').toString())
       if (startDay < timeStamped) {
         calInOut.push({inbound: inbound , outbound: outbound})
-      } else if (calInOut != null) {
+      } else if (calInOut.length != 0) {
         hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('DD')
         // value = (condition) ? if : else
         inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
@@ -501,7 +515,7 @@ export class TrafficService {
       }
     })
     
-    if (calInOut != null) {
+    if (calInOut.length != 0) {
       hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('DD')
       // value = (condition) ? if : else
       inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
@@ -639,7 +653,7 @@ export class TrafficService {
       }
     })
 
-    if (calInOut != null) {
+    if (calInOut.length != 0) {
       inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
       outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
       yearTimeFormat = moment(startTime,'YYYY-MM-DD HH:mm:ss').subtract(7, 'hour').format('MM')
