@@ -42,8 +42,8 @@ export class TrafficService {
   async getTrafficDataPick(deviceName: string, startAt: number, endAt: number): Promise<TrafficInterface[]> {   
     const data = []
 
-    const start = new Date(moment.unix(startAt).toString())
-    const end = new Date(moment.unix(endAt).toString())
+    const start = new Date(moment.unix(startAt).add(7, 'hour').toString())
+    const end = new Date(moment.unix(endAt).add(7, 'hour').toString())
 
     console.log("start pic",start,"start",+start)
     console.log("end pic",end,"end",+end)
@@ -138,9 +138,11 @@ export class TrafficService {
       if (startDay < timeStamped) {
         calInOut.push({inbound: inbound, outbound: outbound})
       } else if (calInOut.length != 0) {
+  
         inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
         outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
         hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('DD-MM')
+
         inDays.push({ id: result.id, timestamp: hourTimeShow, inbound: inboundResult , outbound: outboundResult })
         reduceDay++
         calInOut = []
@@ -493,7 +495,10 @@ export class TrafficService {
       if (startDay < timeStamped) {
         calInOut.push({inbound: inbound , outbound: outbound})
       } else if (calInOut.length != 0) {
+        console.log("firse",calInOut[0].inbound)
+        console.log("last",calInOut[calInOut.length - 1].inbound)
         hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('DD')
+        console.log("hourTimeShow",hourTimeShow)
         // value = (condition) ? if : else
         inboundResult = (calInOut[0].inbound > calInOut[calInOut.length - 1].inbound) ? (calInOut[0].inbound - calInOut[calInOut.length - 1].inbound) : (calInOut[calInOut.length - 1].inbound - calInOut[0].inbound);
         outboundResult = (calInOut[0].outbound > calInOut[calInOut.length - 1].outbound) ? (calInOut[0].outbound - calInOut[calInOut.length - 1].outbound) : (calInOut[calInOut.length - 1].outbound - calInOut[0].outbound);
