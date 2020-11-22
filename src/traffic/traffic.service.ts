@@ -36,7 +36,11 @@ export class TrafficService {
       const time = moment.unix(timestamp._seconds).format('HH:mm')
         data.push({ id: result.id, timestamp: time, ...other })
     })
-    return data
+    var swapdata = []
+    for (var i=data.length-1;0<=i;i--){
+      swapdata.push(data[i])
+    }
+    return swapdata
   }
 
   async getTrafficDataPick(deviceName: string, startAt: number, endAt: number): Promise<TrafficInterface[]> {   
@@ -167,8 +171,12 @@ export class TrafficService {
       hourTimeShow = moment(startDay,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('DD-MM')
       inDays.push({ id: data[data.length - 1].id, timestamp: hourTimeShow, inbound: inboundResult , outbound: outboundResult })
     }
-
-    return inDays
+    
+    var swapInDays = []
+    for (var i=inDays.length-1;0<=i;i--){
+      swapInDays.push(inDays[i])
+    }
+    return swapInDays
   }
 
   async getTrafficDataByType(deviceName: string, type: string): Promise<TrafficInterface[]> { 
@@ -251,8 +259,11 @@ export class TrafficService {
         i++
       })
     }
-
-    return nano
+    var swapNano = []
+    for (var i=nano.length-1;0<=i;i--){
+      swapNano.push(nano[i])
+    }
+    return swapNano
   }
 
   async getTrafficDataByDays(deviceName: string): Promise<TrafficInterface[]> {   
@@ -392,7 +403,11 @@ export class TrafficService {
       hourTimeShow = moment(startTime,'YYYY-MM-DD HH:mm:ss.SSS').subtract(7, 'hour').format('HH:mm')
       inHour.push({ id: data[data.length - 1].id, timestamp: hourTimeShow, inbound: inboundResult , outbound: outboundResult })      
     }
-    return inHour
+    var swapInHour = []
+    for (var i=inHour.length-1;0<=i;i--){
+      swapInHour.push(inHour[i])
+    }
+    return swapInHour
   }
 
   async getTrafficDataByMonth(deviceName: string): Promise<TrafficInterface[]> {   
@@ -528,8 +543,11 @@ export class TrafficService {
       inDays.push({ id: data[data.length - 1].id, timestamp: hourTimeShow, inbound: inboundResult , outbound: outboundResult })
       reduceDay++
     }
-
-    return inDays
+    var swapInDays = []
+    for (var i=inDays.length-1;0<=i;i--){
+      swapInDays.push(inDays[i])
+    }
+    return swapInDays
   }
 
   async getTrafficDataByYear(deviceName: string): Promise<TrafficInterface[]> {   
@@ -664,8 +682,12 @@ export class TrafficService {
       yearTimeFormat = moment(startTime,'YYYY-MM-DD HH:mm:ss').subtract(7, 'hour').format('MM')
       inMonth.push({ id: data[data.length - 1].id, timestamp: yearTimeFormat, inbound: inboundResult , outbound: outboundResult })
     }
+    var swapInMounth = []
+    for (var i=inMonth.length-1;0<=i;i--){
+      swapInMounth.push(inMonth[i])
+    }
     
-    return inMonth
+    return swapInMounth
   }
 }
     
