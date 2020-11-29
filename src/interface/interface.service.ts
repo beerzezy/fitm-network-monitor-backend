@@ -39,7 +39,19 @@ export class InterfaceService {
       
       if (search.test(result.id) == true) {
         const name = result.id.replace(/-/g, '/').replace("unrouted ", "")
-        data.push({ interface: name, ...result.data() })
+        let placeName = ""
+        if (name == "VLAN 1005" || name ==  "VLAN 1004" ||name == "VLAN 1003" || name == "VLAN 1002" || name == "VLAN 1" || name == "VLAN 446") { //r101c
+          placeName = "co-working space (B1-01)"
+        } else if (name == "Vlan100" || name == "Vlan206" || name == "Vlan305" || name == "Vlan413" || name == "Vlan51" || name == "Vlan52" || name == "Vlan53" || name == "Vlan54" || name == "Vlan55" || name == "Vlan56" || name == "Vlan57" || name == "Vlan58" || name == "Vlan59" || name == "Vlan60" || name == "Vlan602" || name == "Vlan608" || name == "Vlan604" || name == "Vlan666" || name == "Vlan9" || name == "Vlan99") {
+          placeName = "ห้องปฏิบัติการเครือข่าย (B4-15)"
+        } else if (name == "Vlan606" || name == "Vlan620") {
+          placeName = "ห้องพวงแสด"
+        } else if (name == "Vlan1" || name == "Vlan31"|| name == "Vlan32"|| name == "Vlan33"|| name == "Vlan34") {
+          placeName = "ห้องภาควิชาจักรกลเกษตร (B3-30A)"
+        } else if (name == "Vlan111" || name == "Vlan150" || name == "Vlan247" || name == "Vlan247" || name == "Vlan304" || name == "Vlan305" || name == "Vlan310" || name == "Vlan323" || name == "Vlan399" || name == "Vlan415" || name == "Vlan43" || name == "Vlan44" || name == "Vlan45" || name == "Vlan46" || name == "Vlan47" || name == "Vlan59" || name == "Vlan600" || name == "Vlan606" || name == "Vlan611" || name == "Vlan612" || name == "Vlan613" || name == "Vlan620" || name == "Vlan777" || name == "Vlan88" || name == "Vlan99"){
+          placeName = "ห้องวิทยาการสารสนเทศ (B4-01)"
+        }
+        data.push({ interface: name, place: placeName, ...result.data() })
       }
     })
     
@@ -55,7 +67,19 @@ export class InterfaceService {
 
       if (search.test(result.id) == true) {
         const name = result.id.replace(/-/g, '/').replace("unrouted ", "")
-        data.push({ interface: name, ...result.data() })
+        let placeName = ""
+        if (name == "VLAN 1005" || name ==  "VLAN 1004" ||name == "VLAN 1003" || name == "VLAN 1002" || name == "VLAN 1" || name == "VLAN 446") { //r101c
+          placeName = "co-working space (B1-01)"
+        } else if (name == "Vlan100" || name == "Vlan206" || name == "Vlan305" || name == "Vlan413" || name == "Vlan51" || name == "Vlan52" || name == "Vlan53" || name == "Vlan54" || name == "Vlan55" || name == "Vlan56" || name == "Vlan57" || name == "Vlan58" || name == "Vlan59" || name == "Vlan60" || name == "Vlan602" || name == "Vlan608" || name == "Vlan604" || name == "Vlan666" || name == "Vlan9" || name == "Vlan99") {
+          placeName = "ห้องปฏิบัติการเครือข่าย (B4-15)"
+        } else if (name == "Vlan606" || name == "Vlan620") {
+          placeName = "ห้องพวงแสด"
+        } else if (name == "Vlan1" || name == "Vlan31"|| name == "Vlan32"|| name == "Vlan33"|| name == "Vlan34") {
+          placeName = "ห้องภาควิชาจักรกลเกษตร (B3-30A)"
+        } else if (name == "Vlan111" || name == "Vlan150" || name == "Vlan247" || name == "Vlan247" || name == "Vlan304" || name == "Vlan305" || name == "Vlan310" || name == "Vlan323" || name == "Vlan399" || name == "Vlan415" || name == "Vlan43" || name == "Vlan44" || name == "Vlan45" || name == "Vlan46" || name == "Vlan47" || name == "Vlan59" || name == "Vlan600" || name == "Vlan606" || name == "Vlan611" || name == "Vlan612" || name == "Vlan613" || name == "Vlan620" || name == "Vlan777" || name == "Vlan88" || name == "Vlan99"){
+          placeName = "ห้องวิทยาการสารสนเทศ (B4-01)"
+        }
+        data.push({ interface: name, place: placeName, ...result.data() })
       }
     })
 
