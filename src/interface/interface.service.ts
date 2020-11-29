@@ -40,17 +40,71 @@ export class InterfaceService {
       if (search.test(result.id) == true) {
         const name = result.id.replace(/-/g, '/').replace("unrouted ", "")
         let placeName = ""
-        if (name == "VLAN 1005" || name ==  "VLAN 1004" ||name == "VLAN 1003" || name == "VLAN 1002" || name == "VLAN 1" || name == "VLAN 446") { //r101c
-          placeName = "co-working space (B1-01)"
-        } else if (name == "Vlan100" || name == "Vlan206" || name == "Vlan305" || name == "Vlan413" || name == "Vlan51" || name == "Vlan52" || name == "Vlan53" || name == "Vlan54" || name == "Vlan55" || name == "Vlan56" || name == "Vlan57" || name == "Vlan58" || name == "Vlan59" || name == "Vlan60" || name == "Vlan602" || name == "Vlan608" || name == "Vlan604" || name == "Vlan666" || name == "Vlan9" || name == "Vlan99") {
-          placeName = "ห้องปฏิบัติการเครือข่าย (B4-15)"
-        } else if (name == "Vlan606" || name == "Vlan620") {
-          placeName = "ห้องพวงแสด"
-        } else if (name == "Vlan1" || name == "Vlan31"|| name == "Vlan32"|| name == "Vlan33"|| name == "Vlan34") {
-          placeName = "ห้องภาควิชาจักรกลเกษตร (B3-30A)"
-        } else if (name == "Vlan111" || name == "Vlan150" || name == "Vlan247" || name == "Vlan247" || name == "Vlan304" || name == "Vlan305" || name == "Vlan310" || name == "Vlan323" || name == "Vlan399" || name == "Vlan415" || name == "Vlan43" || name == "Vlan44" || name == "Vlan45" || name == "Vlan46" || name == "Vlan47" || name == "Vlan59" || name == "Vlan600" || name == "Vlan606" || name == "Vlan611" || name == "Vlan612" || name == "Vlan613" || name == "Vlan620" || name == "Vlan777" || name == "Vlan88" || name == "Vlan99"){
-          placeName = "ห้องวิทยาการสารสนเทศ (B4-01)"
-        }
+
+        if (name == "Vlan43") {
+          placeName = "(B4-01A)"
+        } else if (name == "Vlan44") {
+          placeName = "(B4-01B)"
+        }  else if (name == "Vlan45") {
+          placeName = "(B4-02)"
+        } else if (name == "Vlan46") {
+          placeName = "(Other)"
+        } else if (name == "Vlan47") {
+          placeName = "(AP)"
+        } else if (name == "Vlan304") {
+          placeName = "(SW3850)"
+        } else if (name == "Vlan323") {
+          placeName = "(B3-23)"
+        } else if (name == "Vlan600") {
+          placeName = "(401-AP)"
+        } else if (name == "Vlan606") {
+          placeName = "(C104-AP)"
+        } else if (name == "Vlan611") {
+          placeName = "(FITM-Staff)"
+        } else if (name == "Vlan612") {
+          placeName = "(FITM-Student)"
+        } else if (name == "Vlan613") {
+          placeName = "(FITM-Visitor)"
+        } else if (name == "Vlan620") {
+          placeName = "(Old Puangsad)"
+        } else if (name == "Vlan777") {
+          placeName = "(Server)"
+        } else if (name == "Vlan305") {
+          placeName = "(Signage)"
+        } else if (name == "Vlan51") {
+          placeName = "(B4-08)"
+        } else if (name == "Vlan52") {
+          placeName = "(B4-09)"
+        } else if (name == "Vlan53") {
+          placeName = "(B4-11)"
+        } else if (name == "Vlan54") {
+          placeName = "(B4-15)"
+        } else if (name == "Vlan55") {
+          placeName = "(B4-16)"
+        } else if (name == "Vlan56") {
+          placeName = "(B4-17)"
+        } else if (name == "Vlan58") {
+          placeName = "(AP)"
+        } else if (name == "Vlan206") {
+          placeName = "(CharpFL2)"
+        } else if (name == "Vlan305") {
+          placeName = "(TV)"
+        } else if (name == "Vlan413") {
+          placeName = "(B4-13)"
+        }  else if (name == "Vlan602") {
+          placeName = "(415-AP)"
+        } else if (name == "Vlan604") {
+          placeName = "(216-AP)"
+        } else if (name == "Vlan608") {
+          placeName = "(121-AP)"
+        } else if (name == "Vlan666") {
+          placeName = "(Server46)"
+        } else if (name == "Vlan603") {
+          placeName = "(330A-AP)"
+        } else if (name == "VLAN 446") {
+          placeName = "(2.02.44.46.0)"
+        }  
+        
         data.push({ interface: name, place: placeName, ...result.data() })
       }
     })
@@ -68,17 +122,69 @@ export class InterfaceService {
       if (search.test(result.id) == true) {
         const name = result.id.replace(/-/g, '/').replace("unrouted ", "")
         let placeName = ""
-        if (name == "VLAN 1005" || name ==  "VLAN 1004" ||name == "VLAN 1003" || name == "VLAN 1002" || name == "VLAN 1" || name == "VLAN 446") { //r101c
-          placeName = "co-working space (B1-01)"
-        } else if (name == "Vlan100" || name == "Vlan206" || name == "Vlan305" || name == "Vlan413" || name == "Vlan51" || name == "Vlan52" || name == "Vlan53" || name == "Vlan54" || name == "Vlan55" || name == "Vlan56" || name == "Vlan57" || name == "Vlan58" || name == "Vlan59" || name == "Vlan60" || name == "Vlan602" || name == "Vlan608" || name == "Vlan604" || name == "Vlan666" || name == "Vlan9" || name == "Vlan99") {
-          placeName = "ห้องปฏิบัติการเครือข่าย (B4-15)"
-        } else if (name == "Vlan606" || name == "Vlan620") {
-          placeName = "ห้องพวงแสด"
-        } else if (name == "Vlan1" || name == "Vlan31"|| name == "Vlan32"|| name == "Vlan33"|| name == "Vlan34") {
-          placeName = "ห้องภาควิชาจักรกลเกษตร (B3-30A)"
-        } else if (name == "Vlan111" || name == "Vlan150" || name == "Vlan247" || name == "Vlan247" || name == "Vlan304" || name == "Vlan305" || name == "Vlan310" || name == "Vlan323" || name == "Vlan399" || name == "Vlan415" || name == "Vlan43" || name == "Vlan44" || name == "Vlan45" || name == "Vlan46" || name == "Vlan47" || name == "Vlan59" || name == "Vlan600" || name == "Vlan606" || name == "Vlan611" || name == "Vlan612" || name == "Vlan613" || name == "Vlan620" || name == "Vlan777" || name == "Vlan88" || name == "Vlan99"){
-          placeName = "ห้องวิทยาการสารสนเทศ (B4-01)"
-        }
+        if (name == "Vlan43") {
+          placeName = "(B4-01A)"
+        } else if (name == "Vlan44") {
+          placeName = "(B4-01B)"
+        }  else if (name == "Vlan45") {
+          placeName = "(B4-02)"
+        } else if (name == "Vlan46") {
+          placeName = "(Other)"
+        } else if (name == "Vlan47") {
+          placeName = "(AP)"
+        } else if (name == "Vlan304") {
+          placeName = "(SW3850)"
+        } else if (name == "Vlan323") {
+          placeName = "(B3-23)"
+        } else if (name == "Vlan600") {
+          placeName = "(401-AP)"
+        } else if (name == "Vlan606") {
+          placeName = "(C104-AP)"
+        } else if (name == "Vlan611") {
+          placeName = "(FITM-Staff)"
+        } else if (name == "Vlan612") {
+          placeName = "(FITM-Student)"
+        } else if (name == "Vlan613") {
+          placeName = "(FITM-Visitor)"
+        } else if (name == "Vlan620") {
+          placeName = "(Old Puangsad)"
+        } else if (name == "Vlan777") {
+          placeName = "(Server)"
+        } else if (name == "Vlan305") {
+          placeName = "(Signage)"
+        } else if (name == "Vlan51") {
+          placeName = "(B4-08)"
+        } else if (name == "Vlan52") {
+          placeName = "(B4-09)"
+        } else if (name == "Vlan53") {
+          placeName = "(B4-11)"
+        } else if (name == "Vlan54") {
+          placeName = "(B4-15)"
+        } else if (name == "Vlan55") {
+          placeName = "(B4-16)"
+        } else if (name == "Vlan56") {
+          placeName = "(B4-17)"
+        } else if (name == "Vlan58") {
+          placeName = "(AP)"
+        } else if (name == "Vlan206") {
+          placeName = "(CharpFL2)"
+        } else if (name == "Vlan305") {
+          placeName = "(TV)"
+        } else if (name == "Vlan413") {
+          placeName = "(B4-13)"
+        }  else if (name == "Vlan602") {
+          placeName = "(415-AP)"
+        } else if (name == "Vlan604") {
+          placeName = "(216-AP)"
+        } else if (name == "Vlan608") {
+          placeName = "(121-AP)"
+        } else if (name == "Vlan666") {
+          placeName = "(Server46)"
+        } else if (name == "Vlan603") {
+          placeName = "(330A-AP)"
+        } else if (name == "VLAN 446") {
+          placeName = "(202.44.46.0)"
+        }  
         data.push({ interface: name, place: placeName, ...result.data() })
       }
     })
