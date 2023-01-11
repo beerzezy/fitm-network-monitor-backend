@@ -28,7 +28,7 @@
     "@nestjs/platform-express": "^6.7.2",
     "axios": "^0.19.2",
     "class-transformer": "^0.2.3",
-    "class-validator": "^0.11.0",
+    "class-validator": "^0.14.0",
     "firebase-admin": "^8.8.0",
     "fs": "0.0.1-security",
     "moment": "^2.24.0",
